@@ -1,12 +1,13 @@
-import React from 'react'
-import Navbar from './components/Navbar'
+import React from "react";
+import Navbar from "./components/Navbar";
+import { Box } from "@mui/material";
 
 function App() {
   return (
-    <div>
-      app
-    </div>
-  )
+    <Box sx={{ px: { xs: 2, md: 6 }, fontFamily: "Open Sans, sans-serif" }}>
+      <Navbar />
+    </Box>
+  );
 }
 
-export default App
+export default App;
