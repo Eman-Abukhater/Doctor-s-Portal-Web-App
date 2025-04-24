@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import { Box, Button } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Box,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const navItems = [
   "Home",
@@ -15,6 +24,23 @@ const navItems = [
 function Navbar() {
   // state to control the mobile menu
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const handleDrawerToggle = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        Doctors Portal
+      </Typography>
+      <List>
+        {navItems.map((item) => (
+          <ListItem button key={item}>
+            <ListItemText primary={item} />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
   return (
     <>
       <AppBar
@@ -47,8 +73,30 @@ function Navbar() {
               </Button>
             ))}
           </Box>
+          {/* Mobile Menu Icon */}
+          <IconButton
+            aria-label="menue"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ display: { md: "none" }, color: "black" }}
+          >
+            <MenuIcon sx={{ fontSize: 40, fontWeight: 100 }} />
+          </IconButton>
         </Toolbar>
       </AppBar>
+      {/* Mobile Menu */}
+      {/* Drawer */}
+      <Drawer
+        anchor="right"
+        open={mobileMenuOpen}
+        onClose={handleDrawerToggle}
+        sx={{
+          display: { xs: "block", md: "none" },
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: 240 },
+        }}
+      >
+        {drawer}
+      </Drawer>
     </>
   );
 }
