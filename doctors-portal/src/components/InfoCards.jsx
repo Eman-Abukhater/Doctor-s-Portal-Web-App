@@ -27,25 +27,25 @@ const cardData = [
 
 const InfoCards = () => {
   return (
-    <Box sx={{ mt: 8, mb: 4, px: { xs: 1, md: 2 } }}>
+    <Box sx={{ mt:{ xs:1, md:8}, mb: 4, px: { xs: 1, md: 2 } }}>
       <Grid container spacing={3} sx={{ py: 4 }}>
         {cardData.map((card, index) => (
-          <Grid item xs={12} sm={4} key={index} sx={{ mb: 6 }}>
+          <Grid item xs={12} sm={4} key={index} sx={{ mb: 2 }}>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: { md: "row", xs: "column" },
                 background: card.bgColor,
                 color: card.color,
-                borderRadius: 2,
+                borderRadius: 3,
                 p: 3,
-                height: "100%",
+                height: "80%",
               }}
             >
               {/* Image Box */}
               <Box
                 sx={{
-                  mr: 2,
+                  mr: { xs: 0, md: 2 },
                   display: "flex",
                   justifyContent: { xs: "center", md: "flex-start" }, // Center image on small screens, left-align on large screens
                   alignItems: "center", // Vertically center the image in column mode
@@ -64,9 +64,9 @@ const InfoCards = () => {
               {/* Text Box */}
               <Box
                 sx={{
-                  justifyContent: { xs: "flex-start", md: "center" }, 
-                  alignItems: "center", 
-                  mt: { xs: 0, md: 6 }
+                  justifyContent: { xs: "flex-start", md: "center" },
+                  alignItems: "center",
+                  mt: { xs: 0, md: 6 },
                 }}
               >
                 <Typography
