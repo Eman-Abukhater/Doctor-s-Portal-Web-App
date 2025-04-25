@@ -7,9 +7,9 @@ function HeroSection() {
       container
       spacing={10}
       alignItems="center"
-      sx={{ px: { xs: 2, md: 3 }, py: { xs: 2, md: "15%" } }}
+      sx={{ px: { xs: 2, md: 3 }, py: { xs: 8, md: "15%" } }}
     >
-      <Grid item xs={12} sm={6} md={6} lg={6}>
+      <Grid item xs={12} md={6}>
         <Box
           component="img"
           src={chair}
@@ -17,14 +17,7 @@ function HeroSection() {
           sx={{ width: "100%", maxHeight: 400 }}
         />
       </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={6}
-        md={6}
-        lg={6}
-        sx={{ textAlign: { xs: "center", md: "left" } }}
-      >
+      <Grid item xs={12} md={6} sx={{ textAlign: "left" }}>
         <Typography
           variant="h3"
           sx={{ fontWeight: "bold", mb: 2, color: "#3A4256" }}

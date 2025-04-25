@@ -76,11 +76,11 @@ function Navbar() {
           {/* Mobile Menu Icon */}
           <IconButton
             aria-label="menue"
-            edge="start"
+            edge="end"
             onClick={handleDrawerToggle}
             sx={{ display: { md: "none" }, color: "black" }}
           >
-            <MenuIcon sx={{ fontSize: 40, fontWeight: 100 }} />
+            <MenuIcon sx={{ fontSize: 30}} />
           </IconButton>
         </Toolbar>
       </AppBar>
