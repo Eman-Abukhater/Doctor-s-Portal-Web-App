@@ -47,13 +47,13 @@ function Navbar() {
         position="static"
         sx={{ backgroundColor: "white", boxShadow: "none" }}
       >
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography variant="h6" sx={{ color: "black" }}>
+        <Toolbar sx={{ justifyContent: "space-between" ,mt:-1}}>
+          <Typography variant="h7" sx={{ color: "black" }}>
             Doctors Portal
           </Typography>
 
           {/* Nav Items */}
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
             {navItems.map((item) => (
               <Button
                 key={item}
@@ -62,7 +62,7 @@ function Navbar() {
                   backgroundColor: item === "Home" ? "#3A4256" : "transparent",
                   borderRadius: "8px",
                   textTransform: "none",
-                  fontSize: "16px",
+                  fontSize: "14px",
                   "&:hover":
                     item === "Home"
                       ? { backgroundColor: "#D4D9E3", color: "#3A4256" }
