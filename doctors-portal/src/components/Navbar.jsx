@@ -45,7 +45,7 @@ function Navbar() {
     <>
       <AppBar
         position="static"
-        sx={{ backgroundColor: "white", boxShadow: "none" }}
+        sx={{ backgroundColor: "white", boxShadow: "none", px: {  md: 6 } }}
       >
         <Toolbar sx={{ justifyContent: "space-between" ,mt:-1}}>
           <Typography variant="h7" sx={{ color: "black" }}>

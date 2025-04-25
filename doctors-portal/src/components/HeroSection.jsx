@@ -1,26 +1,17 @@
 import React from "react";
 import { Grid, Box, Typography, Button } from "@mui/material";
-import chair from "../assets/chair.png";
 function HeroSection() {
   return (
     <Grid
       container
       spacing={10}
       alignItems="center"
-      sx={{ px: { xs: 2, md: 3 }, py: { xs: 8, md: "15%" } }}
+      sx={{ px: { xs: 2, md: 8 }, py: { xs: 8, md: "15%" } }}
     >
-      <Grid item xs={12} md={6}>
-        <Box
-          component="img"
-          src={chair}
-          alt="Dental Chair"
-          sx={{ width: "100%", maxHeight: 400 }}
-        />
-      </Grid>
-      <Grid item xs={12} md={6} sx={{ textAlign: "left" }}>
+      <Grid item xs={12} md={6} sx={{ textAlign: "left" ,order: { xs: 2, md: 1 }}}>
         <Typography
           variant="h3"
-          sx={{ fontWeight: "bold", mb: 2, color: "#3A4256" }}
+          sx={{ fontWeight:600, mb: 2, color: "#3A4256" }}
         >
           Your New Smile Starts Here
         </Typography>
@@ -49,6 +40,14 @@ function HeroSection() {
         >
           GET STARTED
         </Button>
+      </Grid>
+      <Grid item xs={12} md={6} sx={{order: { xs: 1, md: 2 } }}>
+        <Box
+          component="img"
+          src="/assets/chair.png"
+          alt="Dental Chair"
+          sx={{ width: "100%", maxHeight: 400 }}
+        />
       </Grid>
     </Grid>
   );
