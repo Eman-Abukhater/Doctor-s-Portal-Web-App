@@ -5,6 +5,7 @@ import Services from '../components/Services/Services'
 import ExceptionalCare from '../components/ExceptionalCare'
 import AppointmentBanner from '../components/AppointmentBanner'
 import Testimonial from '../components/Testimonial'
+import ContactForm from '../components/ContactForm'
 
 function Home() {
   return (
@@ -15,6 +16,7 @@ function Home() {
    <ExceptionalCare />
    <AppointmentBanner />
    <Testimonial />
+   <ContactForm />
    
    </>
   )
