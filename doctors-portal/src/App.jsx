@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import { Box } from "@mui/material";
 import HeroSection from "./components/HeroSection";
 import Home from "./pages/Home";
+import "./App.css";
 
 function App() {
   return (
