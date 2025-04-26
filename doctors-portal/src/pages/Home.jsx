@@ -4,6 +4,7 @@ import InfoCards from '../components/InfoCards'
 import Services from '../components/Services/Services'
 import ExceptionalCare from '../components/ExceptionalCare'
 import AppointmentBanner from '../components/AppointmentBanner'
+import Testimonial from '../components/Testimonial'
 
 function Home() {
   return (
@@ -13,6 +14,7 @@ function Home() {
    <Services />
    <ExceptionalCare />
    <AppointmentBanner />
+   <Testimonial />
    
    </>
   )
