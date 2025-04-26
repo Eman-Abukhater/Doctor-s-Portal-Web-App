@@ -3,7 +3,7 @@ import { Box, Button, Container, Typography } from "@mui/material";
 
 const ExceptionalCare = () => {
   return (
-    <Box sx={{ py: 10 }}>
+    <Box sx={{ py: {md:10 }}}>
       <Container>
         <Box
           sx={{
@@ -19,21 +19,24 @@ const ExceptionalCare = () => {
               component="img"
               src="/assets/treatment.png"
               alt="Exceptional Dental Care"
-              sx={{ width: "70%", borderRadius: 2 }}
+              sx={{ width:{xs:"80%", md:"70%"}, borderRadius: 2 }}
             />
           </Box>
 
-          <Box sx={{ flex: 1 }}>
+          <Box sx={{ flex: 1 , mt:3,px:1}}>
             <Typography
-              variant="h3"
-              fontWeight="bold"
+              variant="h4"
+              fontWeight="700"
               color="#3A4256"
+              width={{ xs: "100%", md: "70%" }}
+
+
               gutterBottom
             >
-              Exceptional Dental <br />
+              Exceptional Dental 
               Care, on Your Terms
             </Typography>
-            <Typography variant="body2" color="#000000" mb={3} sx={{width:'70%'}}>
+            <Typography variant="body2" color="#000000" mb={3} sx={{width:{md:'70%'}}}>
               It is a long established fact that a reader will be distracted by
               the readable content of a page when looking at its layout. The
               point of using Lorem Ipsumis that it has a more-or-less normal
