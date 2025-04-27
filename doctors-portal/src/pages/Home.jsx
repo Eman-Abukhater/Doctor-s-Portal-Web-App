@@ -6,6 +6,7 @@ import ExceptionalCare from '../components/ExceptionalCare'
 import AppointmentBanner from '../components/AppointmentBanner'
 import Testimonial from '../components/Testimonial'
 import ContactForm from '../components/ContactForm'
+import Footer from '../components/Footer'
 
 function Home() {
   return (
@@ -17,6 +18,7 @@ function Home() {
    <AppointmentBanner />
    <Testimonial />
    <ContactForm />
+   <Footer />
    
    </>
   )
