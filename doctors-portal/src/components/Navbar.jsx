@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -14,19 +15,23 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 
 const navItems = [
-  "Home",
-  "About",
-  "Appointment",
-  "Reviews",
-  "Contact Us",
-  "Login",
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+  { name: "Appointment", path: "/appointment" },
+  { name: "Reviews", path: "/reviews" },
+  { name: "Contact Us", path: "/contact" },
+  { name: "Login", path: "/login" },
 ];
+
 function Navbar() {
+  const location = useLocation(); // gives the current URL path
+
   // state to control the mobile menu
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const handleDrawerToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -34,58 +39,63 @@ function Navbar() {
       </Typography>
       <List>
         {navItems.map((item) => (
-          <ListItem button key={item}>
-            <ListItemText primary={item} />
+          <ListItem button key={item.name}>
+            <ListItemText primary={item.name} />
           </ListItem>
         ))}
       </List>
     </Box>
   );
+
   return (
     <>
       <AppBar
         position="static"
-        sx={{ backgroundColor: "white", boxShadow: "none", px: {  md: 6 } }}
+        sx={{ backgroundColor: "white", boxShadow: "none", px: { md: 6 } }}
       >
-        <Toolbar sx={{ justifyContent: "space-between" ,mt:-1}}>
+        <Toolbar sx={{ justifyContent: "space-between", mt: -1 }}>
           <Typography variant="h7" sx={{ color: "black" }}>
             Doctors Portal
           </Typography>
 
-          {/* Nav Items */}
+          {/* Nav Items for Desktop */}
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
             {navItems.map((item) => (
               <Button
-                key={item}
+                key={item.name}
+                component={Link}  // Use Link for navigation
+                to={item.path}
                 sx={{
-                  color: item === "Home" ? "#D4D9E3" : "black",
-                  backgroundColor: item === "Home" ? "#3A4256" : "transparent",
+                  color: location.pathname === item.path ? "#D4D9E3" : "black",
+                  backgroundColor:
+                    location.pathname === item.path ? "#3A4256" : "transparent",
                   borderRadius: "8px",
                   textTransform: "none",
                   fontSize: "14px",
                   "&:hover":
-                    item === "Home"
+                    location.pathname === item.path
                       ? { backgroundColor: "#D4D9E3", color: "#3A4256" }
                       : "none",
                 }}
               >
-                {item}
+                {item.name} 
               </Button>
             ))}
           </Box>
+
           {/* Mobile Menu Icon */}
           <IconButton
-            aria-label="menue"
+            aria-label="menu"
             edge="end"
             onClick={handleDrawerToggle}
             sx={{ display: { md: "none" }, color: "black" }}
           >
-            <MenuIcon sx={{ fontSize: 30}} />
+            <MenuIcon sx={{ fontSize: 30 }} />
           </IconButton>
         </Toolbar>
       </AppBar>
-      {/* Mobile Menu */}
-      {/* Drawer */}
+
+      {/* Mobile Menu (Drawer) */}
       <Drawer
         anchor="right"
         open={mobileMenuOpen}
