@@ -1,17 +1,20 @@
 import React from "react";
 import Navbar from "./components/Navbar";
 import { Box } from "@mui/material";
-import HeroSection from "./components/HeroSection"; // (even though not used here yet)
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import Appointment from "./pages/Appointment"; // 👉 Import Appointment page
 import "./App.css";
-import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
     <BrowserRouter>
       <Box sx={{ fontFamily: "Open Sans, sans-serif" }}>
         <Navbar />
-        <Home />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/appointment" element={<Appointment />} />
+        </Routes>
       </Box>
     </BrowserRouter>
   );
