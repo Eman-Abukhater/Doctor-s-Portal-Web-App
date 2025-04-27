@@ -7,7 +7,7 @@ const ContactForm = () => {
       sx={{
         background: `url('/assets/bg-blue.png') center/cover no-repeat`,
         backgroundBlendMode: "overlay",
-        height: 450,
+        height: 500,
         py: 5,
       }}
     >

@@ -10,7 +10,7 @@ const AppointmentBanner = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         color: 'white',
-        height: { xs: 400, md: 500 }, 
+        height: { xs: 450, md: 500 }, 
         display: 'flex',
         alignItems: 'center',
         my: 10,
