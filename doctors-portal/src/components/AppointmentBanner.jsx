@@ -10,7 +10,7 @@ const AppointmentBanner = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         color: 'white',
-        height: { xs: 400, md: 400 }, 
+        height: { xs: 400, md: 500 }, 
         display: 'flex',
         alignItems: 'center',
         my: 10,
@@ -23,9 +23,9 @@ const AppointmentBanner = () => {
         alt="Doctor"
         sx={{
           position: 'absolute',
-          top: '-25%' , 
-          left:  '5%' ,
-          height: { xs: 0, md: 500 }, 
+          top: '-20%' , 
+          left:  '2%' ,
+          height: { xs: 0, md: 600 }, 
        
         }}
       />
@@ -38,9 +38,7 @@ const AppointmentBanner = () => {
         <Typography variant="h4" fontWeight="bold" mt={1} mb={2}>
           Make an appointment Today
         </Typography>
-        <Typography variant="body1" color="white" mb={3}>
-          It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. 
-        </Typography>
+        <Typography fontSize={14} fontWeight={300} color="white" mb={3} sx={{width:{xs:"100%",md:450}}}>        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsumis that it has a more-or-less normal distribution of letters,as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page            </Typography>
         <Button
           variant="contained"
           sx={{
