@@ -37,7 +37,7 @@ const appointments = [
 
 function BookAppointment() {
   return (
-    <Box sx={{ mt:{md:30}, px: 2 ,mb:15}}>
+    <Box sx={{ mt:{xs:7,md:30}, px: 2 ,mb:15}}>
       {/* Title */}
       <Typography
         variant="h6"
