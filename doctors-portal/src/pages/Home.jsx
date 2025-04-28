@@ -1,11 +1,11 @@
 import React from 'react'
-import HeroSection from '../components/HeroSection'
-import InfoCards from '../components/InfoCards'
-import Services from '../components/Services/Services'
-import ExceptionalCare from '../components/ExceptionalCare'
-import AppointmentBanner from '../components/AppointmentBanner'
-import Testimonial from '../components/Testimonial'
-import ContactForm from '../components/ContactForm'
+import HeroSection from '../components/Home/HeroSection';
+import InfoCards from '../components/Home/InfoCards';
+import Services from '../components/Home/Services/Services';
+import ExceptionalCare from '../components/Home/ExceptionalCare';
+import AppointmentBanner from '../components/Home/AppointmentBanner';
+import Testimonial from '../components/Home/Testimonial';
+import ContactForm from '../components/Home/ContactForm';
 import Footer from '../components/Footer'
 
 function Home() {

@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import { Box } from "@mui/material";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Appointment from "./pages/Appointment"; // 👉 Import Appointment page
+import Appointment from "./pages/Appointment"; 
 import "./App.css";
 
 function App() {
