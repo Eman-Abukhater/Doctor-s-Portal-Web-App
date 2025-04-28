@@ -13,7 +13,7 @@ function Login() {
       sx={{
         maxWidth: 300,
         mx: "auto",
-        my: 30,
+        my: {xs:10,md:30},
         p: 4,
         boxShadow: 1,
         borderRadius: 3,
