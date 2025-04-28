@@ -17,40 +17,41 @@ export default function Calendar() {
           flexDirection: { xs: "column", md: "row" },
           alignItems: "center",
           justifyContent: "center",
-          gap: {md:15
-          
-          },
+          gap: { md: 15 },
         }}
       >
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Box
-            sx={{
-              boxShadow: 2, // <-- Add shadow
-              borderRadius: 2, // <-- Smooth corners (optional)
-              width: { xs: "100%", md: 300 },
-              height: { xs: "100%", md: "fit-content" },
-            }}
-          >
-            <StaticDatePicker
-              displayStaticWrapperAs="desktop"
-              value={date}
-              onChange={(newValue) => setDate(newValue)}
-              dayOfWeekFormatter={(weekday) =>
-                weekday.format("dd").toUpperCase()
-              }
-              renderInput={(params) => <TextField {...params} />}
-              slotProps={{
-                actionBar: { actions: [] },
-              }}
-              sx={{
-                [`& .${dayCalendarClasses.weekDayLabel}`]: {
-                  color: "black",
-                  fontWeight: "bold",
-                },
-              }}
-            />
-          </Box>
-        </LocalizationProvider>
+        <Box
+          sx={{
+            boxShadow: 2,
+            borderRadius: 2,
+            width: { md: 300 },
+            height: { xs: "100%", md: "fit-content" },
+            order: { xs: 2, md: 1 },
+          }}
+        >
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box>
+              <StaticDatePicker
+                displayStaticWrapperAs="desktop"
+                value={date}
+                onChange={(newValue) => setDate(newValue)}
+                dayOfWeekFormatter={(weekday) =>
+                  weekday.format("dd").toUpperCase()
+                }
+                renderInput={(params) => <TextField {...params} />}
+                slotProps={{
+                  actionBar: { actions: [] },
+                }}
+                sx={{
+                  [`& .${dayCalendarClasses.weekDayLabel}`]: {
+                    color: "black",
+                    fontWeight: "bold",
+                  },
+                }}
+              />
+            </Box>
+          </LocalizationProvider>
+        </Box>
 
         <Box
           component="img"
@@ -60,6 +61,8 @@ export default function Calendar() {
             width: { xs: "100%", md: "46%" },
             borderRadius: 1,
             boxShadow: 3,
+            order: { xs: 1, md: 2 },
+            my: { xs: 2, md: 0 },
           }}
         />
       </Box>
