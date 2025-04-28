@@ -9,7 +9,7 @@ const appointments = [
     spaces: 10,
   },
   {
-    name: "Cosmetic Dentistry",
+    name: "Cavity Protection",
     time: "10:05 AM - 11:30 AM",
     spaces: 10,
   },
@@ -51,7 +51,7 @@ function BookAppointment() {
       <Grid container spacing={4} sx={{px:3,py:6}}>
         {appointments.map((appointment, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
-            <AppointmentCard appointment={appointment} />
+            <AppointmentCard appointment={appointment} selectedDate={new Date()} />
           </Grid>
         ))}
       </Grid>
