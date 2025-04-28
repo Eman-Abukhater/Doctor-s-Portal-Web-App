@@ -13,21 +13,20 @@ import dayjs from "dayjs";
 function BookingModal({ open, handleClose, appointment, selectedDate }) {
   return (
     <Modal open={open} onClose={handleClose}>
-  <Box
-  sx={{
-    position: "absolute",
-    top: { xs: "60%", sm: "50%" },  
-    left: "50%",
-    transform: "translate(-50%, -50%)"  , 
-    width: { xs: "90%", sm: 420 }, 
-    bgcolor: "#FFFFFF",
-    borderRadius: { xs: "16px 16px 0 0", sm: 4 }, 
-    p: 2,
-    boxShadow: 3,
-    border: "none",
-  }}
->
-
+      <Box
+        sx={{
+          position: "absolute",
+          top: { xs: "60%", sm: "50%" },
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: { xs: "90%", sm: 420 },
+          bgcolor: "#FFFFFF",
+          borderRadius: { xs: "16px 16px 0 0", sm: 4 },
+          p: 2,
+          boxShadow: 3,
+          border: "none",
+        }}
+      >
         {/* Close button */}
         <IconButton
           onClick={handleClose}
@@ -88,7 +87,7 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
               borderRadius: 2,
             },
             "& .MuiInputLabel-root": {
-              color: "#000000", 
+              color: "#000000",
             },
             "& .MuiOutlinedInput-notchedOutline": {
               border: "none",
