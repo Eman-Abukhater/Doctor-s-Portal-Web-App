@@ -33,13 +33,19 @@ function Navbar() {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+    <Box sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
         Doctors Portal
       </Typography>
       <List>
         {navItems.map((item) => (
-          <ListItem button key={item.name}>
+          <ListItem
+            key={item.name}
+            component={Link}
+            to={item.path}
+            onClick={handleDrawerToggle}
+            sx={{ textAlign: "left" }}
+          >
             <ListItemText primary={item.name} />
           </ListItem>
         ))}
@@ -63,7 +69,7 @@ function Navbar() {
             {navItems.map((item) => (
               <Button
                 key={item.name}
-                component={Link}  // Use Link for navigation
+                component={Link}
                 to={item.path}
                 sx={{
                   color: location.pathname === item.path ? "#D4D9E3" : "black",
@@ -78,7 +84,7 @@ function Navbar() {
                       : "none",
                 }}
               >
-                {item.name} 
+                {item.name}
               </Button>
             ))}
           </Box>
