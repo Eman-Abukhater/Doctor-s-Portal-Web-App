@@ -3,7 +3,7 @@ import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup
+  signInWithPopup,
 } from "firebase/auth";
 import { auth, googleProvider } from "./firebase"; // adjust the path as needed
 
@@ -12,7 +12,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  
+
   const handleSubmit = async () => {
     try {
       if (isSignUp) {
@@ -26,7 +26,7 @@ function Login() {
       alert(error.message);
     }
   };
-    // Function to handle Google sign-in
+  // Function to handle Google sign-in
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
@@ -35,7 +35,7 @@ function Login() {
       alert(error.message);
     }
   };
-  
+
   const handleToggle = () => {
     setIsSignUp(!isSignUp);
   };
@@ -45,7 +45,7 @@ function Login() {
       sx={{
         maxWidth: 300,
         mx: "auto",
-        my: {xs:10,md:30},
+        my: { xs: 10, md: 30 },
         p: 4,
         boxShadow: 1,
         borderRadius: 3,
@@ -73,6 +73,8 @@ function Login() {
             fullWidth
             variant="outlined"
             size="small"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             sx={{ "& fieldset": { borderRadius: 2 } }}
           />
         </Box>
@@ -94,6 +96,8 @@ function Login() {
           fullWidth
           variant="outlined"
           size="small"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{ "& fieldset": { borderRadius: 2 } }}
         />
       </Box>
@@ -115,6 +119,8 @@ function Login() {
           variant="outlined"
           size="small"
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           sx={{ "& fieldset": { borderRadius: 2 } }}
         />
       </Box>
