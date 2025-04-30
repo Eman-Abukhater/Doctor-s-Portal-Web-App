@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Button, Divider, TextField, Typography, Alert } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  TextField,
+  Typography,
+  Alert,
+} from "@mui/material";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,13 +14,14 @@ import {
 } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 import { useNavigate } from "react-router-dom"; // Import navigation
+import { sendPasswordResetEmail } from "firebase/auth";
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [message, setMessage] = useState(null);         // message text
+  const [message, setMessage] = useState(null); // message text
   const [messageType, setMessageType] = useState(null); // 'success' or 'error'
 
   const navigate = useNavigate();
@@ -40,8 +48,10 @@ function Login() {
         setMessage("This email is already registered. Please login.");
       } else if (error.code === "auth/invalid-email") {
         setMessage("Invalid email format.");
-      } else if (error.code === "auth/wrong-password"||
-        error.code === "auth/invalid-credential") {
+      } else if (
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/invalid-credential"
+      ) {
         setMessage("Incorrect password.");
       } else if (error.code === "auth/user-not-found") {
         setMessage("No user found with this email.");
@@ -50,7 +60,28 @@ function Login() {
       }
     }
   };
-  
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setMessageType("error");
+      setMessage("Please enter your email first.");
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setMessageType("success");
+      setMessage("Password reset email sent!");
+    } catch (error) {
+      setMessageType("error");
+      if (error.code === "auth/user-not-found") {
+        setMessage("No user found with this email.");
+      } else if (error.code === "auth/invalid-email") {
+        setMessage("Invalid email address.");
+      } else {
+        setMessage(error.message);
+      }
+    }
+  };
+
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
@@ -65,7 +96,7 @@ function Login() {
 
   const handleToggle = () => {
     setIsSignUp(!isSignUp);
-    setMessage(null); 
+    setMessage(null);
   };
 
   return (
@@ -94,7 +125,14 @@ function Login() {
       {/* Name Field */}
       {isSignUp && (
         <Box sx={{ textAlign: "left", mb: 2 }}>
-          <label style={{ fontSize: "14px", fontWeight: "500", marginBottom: "5px", display: "block" }}>
+          <label
+            style={{
+              fontSize: "14px",
+              fontWeight: "500",
+              marginBottom: "5px",
+              display: "block",
+            }}
+          >
             Name
           </label>
           <TextField
@@ -110,7 +148,14 @@ function Login() {
 
       {/* Email Field */}
       <Box sx={{ textAlign: "left", mb: 2 }}>
-        <label style={{ fontSize: "14px", fontWeight: "500", marginBottom: "5px", display: "block" }}>
+        <label
+          style={{
+            fontSize: "14px",
+            fontWeight: "500",
+            marginBottom: "5px",
+            display: "block",
+          }}
+        >
           Email
         </label>
         <TextField
@@ -125,7 +170,14 @@ function Login() {
 
       {/* Password Field */}
       <Box sx={{ textAlign: "left", mb: 1 }}>
-        <label style={{ fontSize: "14px", fontWeight: "500", marginBottom: "5px", display: "block" }}>
+        <label
+          style={{
+            fontSize: "14px",
+            fontWeight: "500",
+            marginBottom: "5px",
+            display: "block",
+          }}
+        >
           Password
         </label>
         <TextField
@@ -142,16 +194,17 @@ function Login() {
       {/* Forgot Password */}
       <Typography
         variant="body2"
+        onClick={handleForgotPassword}
         sx={{
           textAlign: "left",
           fontSize: "13px",
           mb: 2,
           mt: 1,
-          color: "#555",
+          color: "#00BCD4",
           cursor: "pointer",
         }}
       >
-        Forgot Password ?
+        Forgot Password?
       </Typography>
 
       {/* Submit Button */}
