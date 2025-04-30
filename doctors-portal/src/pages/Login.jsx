@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup
+} from "firebase/auth";
+import { auth, googleProvider } from "./firebase"; // adjust the path as needed
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
