@@ -9,7 +9,10 @@ import { auth, googleProvider } from "./firebase"; // adjust the path as needed
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  
   const handleToggle = () => {
     setIsSignUp(!isSignUp);
   };
