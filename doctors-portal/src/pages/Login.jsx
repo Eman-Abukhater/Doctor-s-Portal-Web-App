@@ -144,6 +144,7 @@ function Login() {
       <Button
         fullWidth
         variant="contained"
+        onClick={handleSubmit}
         sx={{
           backgroundColor: "#3A4256",
           color: "#D4D9E3",
@@ -185,10 +186,10 @@ function Login() {
         <Divider sx={{ flexGrow: 1 }} />
       </Box>
 
-      {/* Continue with Google Button */}
       <Button
         fullWidth
         variant="outlined"
+        onClick={handleGoogleLogin}
         sx={{
           height: "50px",
           textTransform: "none",
