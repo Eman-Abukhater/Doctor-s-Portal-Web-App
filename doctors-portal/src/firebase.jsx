@@ -6,9 +6,9 @@ const firebaseConfig = {
   apiKey: "AIzaSyDGxjOcjLSyfbrJdDyITAYDmCDlYU2bASk",
   authDomain: "doctors-portal-bc85f.firebaseapp.com",
   projectId: "doctors-portal-bc85f",
-  storageBucket: "doctors-portal-bc85f.appspot.com", // FIXED the typo from .app to .appspot.com
+  storageBucket: "doctors-portal-bc85f.firebasestorage.app",
   messagingSenderId: "505380332692",
-  appId: "1:505380332692:web:1034a97392f69296590081"
+  appId: "1:505380332692:web:1034a97392f69296590081",
 };
 
 // Initialize Firebase

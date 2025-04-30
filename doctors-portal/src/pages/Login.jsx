@@ -1,43 +1,71 @@
 import React, { useState } from "react";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography, Alert } from "@mui/material";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { auth, googleProvider } from "./firebase"; // adjust the path as needed
+import { auth, googleProvider } from "../firebase";
+import { useNavigate } from "react-router-dom"; // Import navigation
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [message, setMessage] = useState(null);         // message text
+  const [messageType, setMessageType] = useState(null); // 'success' or 'error'
+
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
       if (isSignUp) {
         await createUserWithEmailAndPassword(auth, email, password);
-        alert("Signup successful!");
+        setMessageType("success");
+        setMessage("Signup successful! Please login.");
+        setIsSignUp(false); // Switch to login mode after sign-up
+        setEmail("");
+        setPassword("");
+        setName("");
       } else {
         await signInWithEmailAndPassword(auth, email, password);
-        alert("Login successful!");
+        setMessageType("success");
+        setMessage("Login successful! Redirecting...");
+        setTimeout(() => navigate("/"), 1500);
       }
     } catch (error) {
-      alert(error.message);
+      setMessageType("error");
+      if (error.code === "auth/email-already-in-use") {
+        setMessage("This email is already registered. Please login.");
+      } else if (error.code === "auth/invalid-email") {
+        setMessage("Invalid email format.");
+      } else if (error.code === "auth/wrong-password"||
+        error.code === "auth/invalid-credential") {
+        setMessage("Incorrect password.");
+      } else if (error.code === "auth/user-not-found") {
+        setMessage("No user found with this email.");
+      } else {
+        setMessage(error.message);
+      }
     }
   };
-  // Function to handle Google sign-in
+  
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      alert("Logged in with Google!");
+      setMessageType("success");
+      setMessage("Logged in with Google! Redirecting...");
+      setTimeout(() => navigate("/"), 1500);
     } catch (error) {
-      alert(error.message);
+      setMessageType("error");
+      setMessage(error.message);
     }
   };
 
   const handleToggle = () => {
     setIsSignUp(!isSignUp);
+    setMessage(null); 
   };
 
   return (
@@ -56,17 +84,17 @@ function Login() {
         {isSignUp ? "Sign Up" : "Login"}
       </Typography>
 
-      {/* Name Field for Sign Up */}
+      {/* Alert message */}
+      {message && (
+        <Alert severity={messageType} sx={{ mb: 2 }}>
+          {message}
+        </Alert>
+      )}
+
+      {/* Name Field */}
       {isSignUp && (
         <Box sx={{ textAlign: "left", mb: 2 }}>
-          <label
-            style={{
-              fontSize: "14px",
-              fontWeight: "500",
-              marginBottom: "5px",
-              display: "block",
-            }}
-          >
+          <label style={{ fontSize: "14px", fontWeight: "500", marginBottom: "5px", display: "block" }}>
             Name
           </label>
           <TextField
@@ -82,14 +110,7 @@ function Login() {
 
       {/* Email Field */}
       <Box sx={{ textAlign: "left", mb: 2 }}>
-        <label
-          style={{
-            fontSize: "14px",
-            fontWeight: "500",
-            marginBottom: "5px",
-            display: "block",
-          }}
-        >
+        <label style={{ fontSize: "14px", fontWeight: "500", marginBottom: "5px", display: "block" }}>
           Email
         </label>
         <TextField
@@ -104,14 +125,7 @@ function Login() {
 
       {/* Password Field */}
       <Box sx={{ textAlign: "left", mb: 1 }}>
-        <label
-          style={{
-            fontSize: "14px",
-            fontWeight: "500",
-            marginBottom: "5px",
-            display: "block",
-          }}
-        >
+        <label style={{ fontSize: "14px", fontWeight: "500", marginBottom: "5px", display: "block" }}>
           Password
         </label>
         <TextField
@@ -174,13 +188,7 @@ function Login() {
       </Typography>
 
       {/* Divider */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          my: 2,
-        }}
-      >
+      <Box sx={{ display: "flex", alignItems: "center", my: 2 }}>
         <Divider sx={{ flexGrow: 1 }} />
         <Typography sx={{ mx: 2, fontSize: "14px" }}>OR</Typography>
         <Divider sx={{ flexGrow: 1 }} />
