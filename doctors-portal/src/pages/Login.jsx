@@ -13,6 +13,29 @@ function Login() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   
+  const handleSubmit = async () => {
+    try {
+      if (isSignUp) {
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert("Signup successful!");
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Login successful!");
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+    // Function to handle Google sign-in
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      alert("Logged in with Google!");
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  
   const handleToggle = () => {
     setIsSignUp(!isSignUp);
   };
