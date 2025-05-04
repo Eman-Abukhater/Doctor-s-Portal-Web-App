@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   Box,
@@ -10,7 +10,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 // Firebase configuration and initialization for Firestore
-import { db } from "../../firebase/firebase.config";
+import { db } from "../../firebase"; // Adjust the import path as necessary
 import { collection, addDoc } from "firebase/firestore";
 
 function BookingModal({ open, handleClose, appointment, selectedDate }) {
