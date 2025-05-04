@@ -108,6 +108,8 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
           fullWidth
           size="small"
           label="Full Name"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
           sx={{
             mb: 3,
             "& .MuiInputBase-root": {
@@ -121,6 +123,8 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
           fullWidth
           size="small"
           label="Phone Number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           sx={{
             mb: 3,
             "& .MuiInputBase-root": {
@@ -134,6 +138,8 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
           fullWidth
           size="small"
           label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{
             mb: 3,
             "& .MuiInputBase-root": {
