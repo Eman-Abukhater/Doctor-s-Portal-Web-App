@@ -18,6 +18,37 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
+
+  // Function to handle form submission
+  const handleSubmit = async () => {
+    try {
+      await addDoc(collection(db, "appointments"), {
+        name: fullName,
+        phone,
+        email,
+        doctor: appointment.name,
+        time: appointment.time,
+        date: dayjs(selectedDate).format("YYYY-MM-DD"),
+        createdAt: new Date(),
+      });
+
+      setMessage(
+        `Appointment booked successfully with Dr. ${
+          appointment.name
+        } on ${dayjs(selectedDate).format("YYYY-MM-DD")} at ${appointment.time}`
+      );
+      setMessageType("success");
+      setFullName("");
+      setPhone("");
+      setEmail("");
+    } catch (error) {
+      console.error("Error booking appointment:", error);
+      setMessage("Failed to book appointment. Please try again.");
+      setMessageType("error");
+    }
+  };
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -165,9 +196,18 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
               backgroundColor: "#2c3244",
             },
           }}
+          onClick={handleSubmit}
         >
           Submit
         </Button>
+        {message && (
+          <Typography
+            sx={{ mt: 2 }}
+            color={messageType === "success" ? "green" : "red"}
+          >
+            {message}
+          </Typography>
+        )}
       </Box>
     </Modal>
   );
