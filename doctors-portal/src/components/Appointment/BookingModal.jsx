@@ -14,6 +14,11 @@ import { db } from "../../firebase/firebase.config";
 import { collection, addDoc } from "firebase/firestore";
 
 function BookingModal({ open, handleClose, appointment, selectedDate }) {
+  // State variables for form inputs
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
