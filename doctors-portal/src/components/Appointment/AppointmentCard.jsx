@@ -37,6 +37,7 @@ function AppointmentCard({ appointment, selectedDate, handleBooking }) {
             onClick={() => {
               handleOpen();
             }}
+            disabled={appointment.spaces === 0}
           >
             Book Appointment
           </Button>

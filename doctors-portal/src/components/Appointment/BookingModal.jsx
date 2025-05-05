@@ -205,8 +205,12 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
             const success = await handleSubmit(); 
             if (success) {
               handleBooking(appointment.id);
+              handleModalClose(); // Close the modal after successful booking
+              setMessage("");
             }
           }}
+          disabled={appointment.spaces === 0} // Disable when no spaces are available
+
         >
           Submit
         </Button>
