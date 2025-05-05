@@ -15,6 +15,8 @@ import {
 import { auth, googleProvider } from "../firebase";
 import { useNavigate } from "react-router-dom"; // Import navigation
 import { sendPasswordResetEmail } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -23,6 +25,7 @@ function Login() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState(null); // message text
   const [messageType, setMessageType] = useState(null); // 'success' or 'error'
+  const [role, setRole] = useState("patient"); // default role
 
   const navigate = useNavigate();
 
@@ -145,6 +148,37 @@ function Login() {
           />
         </Box>
       )}
+      {/* Role Field */}
+{isSignUp && (
+  <Box sx={{ textAlign: "left", mb: 2 }}>
+    <label
+      style={{
+        fontSize: "14px",
+        fontWeight: "500",
+        marginBottom: "5px",
+        display: "block",
+      }}
+    >
+      Role
+    </label>
+    <TextField
+      select
+      SelectProps={{ native: true }}
+      fullWidth
+      variant="outlined"
+      size="small"
+      value={role}
+      onChange={(e) => setRole(e.target.value)}
+      sx={{ "& fieldset": { borderRadius: 2 } }}
+    >
+      <option value="patient">Patient</option>
+      <option value="doctor">Doctor</option>
+      <option value="admin">Admin</option>
+    </TextField>
+  </Box>
+)}
+
+
 
       {/* Email Field */}
       <Box sx={{ textAlign: "left", mb: 2 }}>
