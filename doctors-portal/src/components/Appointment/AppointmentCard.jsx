@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import BookingModal from "./BookingModal";
 
-function AppointmentCard({ appointment, selectedDate }) {
+function AppointmentCard({ appointment, selectedDate, handleBooking }) {
   const [openModal, setOpenModal] = useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+
   return (
     <>
       <Card elevation={1}>
@@ -33,7 +34,10 @@ function AppointmentCard({ appointment, selectedDate }) {
               boxShadow: "none",
               textTransform: "uppercase",
             }}
-            onClick={handleOpen}
+            onClick={() => {
+              handleOpen();
+              handleBooking(appointment); // Pass appointment to parent for updating spaces
+            }}
           >
             {" "}
             Book Appointment

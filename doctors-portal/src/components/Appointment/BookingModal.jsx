@@ -35,7 +35,7 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
       });
 
       setMessage(
-        `Appointment booked successfully with Dr. ${
+        `Appointment booked successfully for ${
           appointment.name
         } on ${dayjs(selectedDate).format("YYYY-MM-DD")} at ${appointment.time}`
       );
