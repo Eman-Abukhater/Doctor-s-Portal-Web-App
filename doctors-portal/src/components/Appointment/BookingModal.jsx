@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Box,
@@ -9,19 +9,22 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
-// Firebase configuration and initialization for Firestore
-import { db } from "../../firebase"; // Adjust the import path as necessary
+import { db } from "../../firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-function BookingModal({ open, handleClose, appointment, selectedDate }) {
-  // State variables for form inputs
+function BookingModal({ open, handleClose, appointment, selectedDate, handleBooking }) {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); // "success" or "error"
+  const [messageType, setMessageType] = useState(""); 
 
-  // Function to handle form submission
+  useEffect(() => {
+    if (open) {
+      setMessage(""); // Clear message when modal is opened
+    }
+  }, [open]);
+
   const handleSubmit = async () => {
     try {
       await addDoc(collection(db, "appointments"), {
@@ -34,24 +37,27 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
         createdAt: new Date(),
       });
 
-      setMessage(
-        `Appointment booked successfully for ${
-          appointment.name
-        } on ${dayjs(selectedDate).format("YYYY-MM-DD")} at ${appointment.time}`
-      );
+      setMessage(`Appointment booked successfully...`);
       setMessageType("success");
       setFullName("");
       setPhone("");
       setEmail("");
+      return true;
     } catch (error) {
       console.error("Error booking appointment:", error);
       setMessage("Failed to book appointment. Please try again.");
       setMessageType("error");
+      return false;
     }
   };
 
+  const handleModalClose = () => {
+    setMessage(""); // Clear message when the modal is closed
+    handleClose(); // Close the modal
+  };
+
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleModalClose}>
       <Box
         sx={{
           position: "absolute",
@@ -66,9 +72,8 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
           border: "none",
         }}
       >
-        {/* Close button */}
         <IconButton
-          onClick={handleClose}
+          onClick={handleModalClose}
           sx={{
             position: "absolute",
             top: 10,
@@ -86,12 +91,10 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
           <CloseIcon fontSize="medium" />
         </IconButton>
 
-        {/* Title */}
         <Typography fontSize={18} fontWeight={600} sx={{ mb: 5 }}>
           {appointment.name}
         </Typography>
 
-        {/* Disabled Fields */}
         <TextField
           fullWidth
           disabled
@@ -105,7 +108,7 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
               borderRadius: 2,
             },
             "& .MuiInputLabel-root": {
-              color: "#000000", // <-- now correct!
+              color: "#000000",
             },
             "& .MuiOutlinedInput-notchedOutline": {
               border: "none",
@@ -134,7 +137,6 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
           }}
         />
 
-        {/* Inputs */}
         <TextField
           fullWidth
           size="small"
@@ -180,7 +182,6 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
           }}
         />
 
-        {/* Submit Button */}
         <Button
           fullWidth
           variant="contained"
@@ -196,15 +197,17 @@ function BookingModal({ open, handleClose, appointment, selectedDate }) {
               backgroundColor: "#2c3244",
             },
           }}
-          onClick={handleSubmit}
+          onClick={async () => {
+            const success = await handleSubmit(); 
+            if (success) {
+              handleBooking(appointment.id);
+            }
+          }}
         >
           Submit
         </Button>
         {message && (
-          <Typography
-            sx={{ mt: 2 }}
-            color={messageType === "success" ? "green" : "red"}
-          >
+          <Typography sx={{ mt: 2 }} color={messageType === "success" ? "green" : "red"}>
             {message}
           </Typography>
         )}

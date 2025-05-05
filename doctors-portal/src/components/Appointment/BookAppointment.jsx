@@ -44,11 +44,14 @@ function BookAppointment() {
   ]);
 
   const handleBooking = (id) => {
-    const updated = appointments.map((app) =>
-      app.id === id ? { ...app, spaces: app.spaces - 1 } : app
+    const updatedAppointments = appointments.map((appointment) =>
+      appointment.id === id && appointment.spaces > 0
+        ? { ...appointment, spaces: appointment.spaces - 1 }
+        : appointment
     );
-    setAppointments(updated);
+    setAppointments(updatedAppointments);
   };
+  
 
   return (
     <Box sx={{ mt: { xs: 7, md: 30 }, px: 2, mb: 15 }}>

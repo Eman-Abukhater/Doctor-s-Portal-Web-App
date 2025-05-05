@@ -36,10 +36,8 @@ function AppointmentCard({ appointment, selectedDate, handleBooking }) {
             }}
             onClick={() => {
               handleOpen();
-              handleBooking(appointment); // Pass appointment to parent for updating spaces
             }}
           >
-            {" "}
             Book Appointment
           </Button>
         </CardContent>
@@ -50,6 +48,7 @@ function AppointmentCard({ appointment, selectedDate, handleBooking }) {
         handleClose={handleClose}
         appointment={appointment}
         selectedDate={selectedDate}
+        handleBooking={handleBooking}
       />
     </>
   );
