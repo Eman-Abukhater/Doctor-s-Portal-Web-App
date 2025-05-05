@@ -17,11 +17,12 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); 
+  const [messageType, setMessageType] = useState("");
+  const [selectedDoctor, setSelectedDoctor] = useState("");
 
   useEffect(() => {
     if (open) {
-      setMessage(""); // Clear message when modal is opened
+      setMessage("");
     }
   }, [open]);
 
@@ -31,7 +32,8 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
         name: fullName,
         phone,
         email,
-        doctor: appointment.name,
+        doctor: selectedDoctor,
+        service: appointment.name,
         time: appointment.time,
         date: dayjs(selectedDate).format("YYYY-MM-DD"),
         createdAt: new Date(),
@@ -42,6 +44,7 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
       setFullName("");
       setPhone("");
       setEmail("");
+      setSelectedDoctor("");
       return true;
     } catch (error) {
       console.error("Error booking appointment:", error);
@@ -52,8 +55,8 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
   };
 
   const handleModalClose = () => {
-    setMessage(""); // Clear message when the modal is closed
-    handleClose(); // Close the modal
+    setMessage("");
+    handleClose();
   };
 
   return (
@@ -80,9 +83,7 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
             right: 8,
             backgroundColor: "#3A4256",
             color: "#8391AD",
-            "&:hover": {
-              backgroundColor: "#2c3244",
-            },
+            "&:hover": { backgroundColor: "#2c3244" },
             width: 35,
             height: 35,
           }}
@@ -107,12 +108,7 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
               color: "#000000",
               borderRadius: 2,
             },
-            "& .MuiInputLabel-root": {
-              color: "#000000",
-            },
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: "none",
-            },
+            "& .MuiOutlinedInput-notchedOutline": { border: "none" },
           }}
         />
 
@@ -128,14 +124,30 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
               color: "#000000",
               borderRadius: 2,
             },
-            "& .MuiInputLabel-root": {
-              color: "#000000",
-            },
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: "none",
-            },
+            "& .MuiOutlinedInput-notchedOutline": { border: "none" },
           }}
         />
+
+        {/* Doctor Dropdown */}
+        {appointment?.doctors && (
+          <TextField
+            select
+            fullWidth
+            size="small"
+            value={selectedDoctor}
+            onChange={(e) => setSelectedDoctor(e.target.value)}
+            SelectProps={{ native: true }}
+            sx={{ mb: 3 }}
+            disabled={appointment.spaces === 0}
+          >
+            <option value="">-- Select Doctor --</option>
+            {appointment.doctors.map((doctor, index) => (
+              <option key={index} value={doctor}>
+                {doctor}
+              </option>
+            ))}
+          </TextField>
+        )}
 
         <TextField
           fullWidth
@@ -143,15 +155,8 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
           label="Full Name"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          sx={{
-            mb: 3,
-            "& .MuiInputBase-root": {
-              color: "#000000",
-              borderRadius: 2,
-            },
-          }}
-          disabled={appointment.spaces === 0} // Disable when no spaces are available
-
+          sx={{ mb: 3 }}
+          disabled={appointment.spaces === 0}
         />
 
         <TextField
@@ -159,15 +164,9 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
           size="small"
           label="Phone Number"
           value={phone}
-          disabled={appointment.spaces === 0} // Disable when no spaces are available
           onChange={(e) => setPhone(e.target.value)}
-          sx={{
-            mb: 3,
-            "& .MuiInputBase-root": {
-              color: "#000000",
-              borderRadius: 2,
-            },
-          }}
+          sx={{ mb: 3 }}
+          disabled={appointment.spaces === 0}
         />
 
         <TextField
@@ -175,15 +174,9 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
           size="small"
           label="Email"
           value={email}
-          disabled={appointment.spaces === 0} // Disable when no spaces are available
           onChange={(e) => setEmail(e.target.value)}
-          sx={{
-            mb: 3,
-            "& .MuiInputBase-root": {
-              color: "#000000",
-              borderRadius: 2,
-            },
-          }}
+          sx={{ mb: 3 }}
+          disabled={appointment.spaces === 0}
         />
 
         <Button
@@ -197,21 +190,21 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
             fontWeight: 500,
             color: "#D4D9E3",
             borderRadius: 2,
-            "&:hover": {
-              backgroundColor: "#2c3244",
-            },
+            "&:hover": { backgroundColor: "#2c3244" },
           }}
           onClick={async () => {
-            const success = await handleSubmit(); 
+            const success = await handleSubmit();
             if (success) {
               handleBooking(appointment.id);
-              handleModalClose(); // Close the modal after successful booking
-              setMessage("");
+              handleModalClose();
             }
           }}
-          disabled={appointment.spaces === 0} // Disable when no spaces are available
-
-        >
+          disabled={
+            appointment.spaces === 0 ||
+            !fullName.trim() ||
+            !phone.trim() ||
+            !email.trim()||!selectedDoctor.trim()
+          }        >
           Submit
         </Button>
         {message && (

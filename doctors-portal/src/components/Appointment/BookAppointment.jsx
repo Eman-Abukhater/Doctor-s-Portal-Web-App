@@ -10,36 +10,44 @@ function BookAppointment() {
       name: "Teeth Orthodontics",
       time: "8:00 AM - 9:00 AM",
       spaces: 10,
+      doctors: ["Dr. Smith", "Dr. Jane", "Dr. Doe", "Dr. Brown"],
+
     },
     {
       id: 2,
       name: "Cavity Protection",
       time: "10:05 AM - 11:30 AM",
       spaces: 10,
+      doctors: ["Dr. Smith", "Dr. Jane", "Dr. Doe", "Dr. Brown"],
+
     },
     {
       id: 3,
       name: "Teeth Cleaning",
       time: "8:00 AM - 9:00 AM",
       spaces: 10,
+      doctors: ["Dr. Smith", "Dr. Jane", "Dr. Doe", "Dr. Brown"],
     },
     {
       id: 4,
       name: "Wisdom Teeth Removal",
       time: "11:00 AM - 12:00 PM",
       spaces: 10,
+      doctors: ["Dr. Smith", "Dr. Jane", "Dr. Doe", "Dr. Brown"],
     },
     {
       id: 5,
       name: "Checkup",
       time: "1:00 PM - 2:00 PM",
       spaces: 10,
+      doctors: ["Dr. Smith", "Dr. Jane", "Dr. Doe", "Dr. Brown"],
     },
     {
       id: 6,
       name: "Tooth Extraction",
       time: "3:00 PM - 4:00 PM",
       spaces: 1,
+      doctors: ["Dr. Smith", "Dr. Jane", "Dr. Doe", "Dr. Brown"],
     },
   ]);
 
