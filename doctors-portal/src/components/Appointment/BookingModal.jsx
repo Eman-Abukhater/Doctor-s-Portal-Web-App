@@ -150,6 +150,8 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
               borderRadius: 2,
             },
           }}
+          disabled={appointment.spaces === 0} // Disable when no spaces are available
+
         />
 
         <TextField
@@ -157,6 +159,7 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
           size="small"
           label="Phone Number"
           value={phone}
+          disabled={appointment.spaces === 0} // Disable when no spaces are available
           onChange={(e) => setPhone(e.target.value)}
           sx={{
             mb: 3,
@@ -172,6 +175,7 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
           size="small"
           label="Email"
           value={email}
+          disabled={appointment.spaces === 0} // Disable when no spaces are available
           onChange={(e) => setEmail(e.target.value)}
           sx={{
             mb: 3,

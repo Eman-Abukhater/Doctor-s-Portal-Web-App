@@ -39,7 +39,7 @@ function BookAppointment() {
       id: 6,
       name: "Tooth Extraction",
       time: "3:00 PM - 4:00 PM",
-      spaces: 10,
+      spaces: 1,
     },
   ]);
 
