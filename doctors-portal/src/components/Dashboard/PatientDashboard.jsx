@@ -11,16 +11,22 @@ import {
 
 function PatientDashboard() {
   const [appointments, setAppointments] = useState([]);
+  const [patientName, setPatientName] = useState('');
 
   useEffect(() => {
     const storedPatientAppointments = JSON.parse(localStorage.getItem("bookedAppointments"));
     setAppointments(storedPatientAppointments || []);
+
+    // Get the patient's name from localStorage 
+    const storedPatientName = localStorage.getItem("name");
+    setPatientName(storedPatientName );
   }, []);
+
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 800, mx: 'auto' }}>
       <Typography variant="h4" sx={{ mb: 3, fontWeight: 'bold', color: '#2E7D32' }}>
-   {   `   Hello, Patient!`}
+      {`Hello, ${patientName}!`}
       </Typography>
 
       <Typography variant="h6" sx={{ mb: 2 }}>
