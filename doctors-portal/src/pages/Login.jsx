@@ -32,15 +32,43 @@ function Login() {
   const handleSubmit = async () => {
     try {
       if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+  
+        // Save to Firestore
+        await setDoc(doc(db, "users", user.uid), {
+          name,
+          email,
+          role,
+        });
+  
+      
         setMessageType("success");
         setMessage("Signup successful! Please login.");
-        setIsSignUp(false); // Switch to login mode after sign-up
+        setIsSignUp(false);
         setEmail("");
         setPassword("");
         setName("");
       } else {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+  
+        // Get user data from Firestore
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+  
+          // Store user info in localStorage
+          localStorage.setItem("user", JSON.stringify({
+            uid: user.uid,
+            name: userData.name,
+            email: userData.email,
+            role: userData.role
+          }));
+        
+        }
+        navigate("/dashboard"); // Redirect to dashboard
+  
         setMessageType("success");
         setMessage("Login successful! Redirecting...");
         setTimeout(() => navigate("/"), 1500);
@@ -63,6 +91,7 @@ function Login() {
       }
     }
   };
+  
   const handleForgotPassword = async () => {
     if (!email) {
       setMessageType("error");
