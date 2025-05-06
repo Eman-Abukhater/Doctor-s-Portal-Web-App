@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import AppointmentCard from "./AppointmentCard";
 import dayjs from "dayjs";
 
 function BookAppointment() {
-  const [appointments, setAppointments] = useState([
+  const defaultAppointments = [
     {
       id: 1,
       name: "Teeth Orthodontics",
       time: "8:00 AM - 9:00 AM",
       spaces: 10,
       doctors: ["Dr. Smith", "Dr. Jane", "Dr. Doe", "Dr. Brown"],
-
     },
     {
       id: 2,
@@ -19,7 +18,6 @@ function BookAppointment() {
       time: "10:05 AM - 11:30 AM",
       spaces: 10,
       doctors: ["Dr. Smith", "Dr. Jane", "Dr. Doe", "Dr. Brown"],
-
     },
     {
       id: 3,
@@ -49,8 +47,21 @@ function BookAppointment() {
       spaces: 1,
       doctors: ["Dr. Smith", "Dr. Jane", "Dr. Doe", "Dr. Brown"],
     },
-  ]);
+  ];
 
+  const [appointments, setAppointments] = useState([]);
+
+  // Load appointments from localStorage or fallback to default
+  useEffect(() => {
+    const saved = localStorage.getItem("appointments");
+    if (saved) {
+      setAppointments(JSON.parse(saved));
+    } else {
+      setAppointments(defaultAppointments);
+    }
+  }, []);
+
+  // Update appointments and persist in localStorage
   const handleBooking = (id) => {
     const updatedAppointments = appointments.map((appointment) =>
       appointment.id === id && appointment.spaces > 0
@@ -58,8 +69,8 @@ function BookAppointment() {
         : appointment
     );
     setAppointments(updatedAppointments);
+    localStorage.setItem("appointments", JSON.stringify(updatedAppointments));
   };
-  
 
   return (
     <Box sx={{ mt: { xs: 7, md: 30 }, px: 2, mb: 15 }}>

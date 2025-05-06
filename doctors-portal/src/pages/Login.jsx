@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom"; // Import navigation
 import { sendPasswordResetEmail } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { query, collection, where, getDocs } from "firebase/firestore";
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -26,69 +27,92 @@ function Login() {
   const [message, setMessage] = useState(null); // message text
   const [messageType, setMessageType] = useState(null); // 'success' or 'error'
   const [role, setRole] = useState("patient"); // default role
+  const [allDoctorNames, setAllDoctorNames] = useState([]);
+const [selectedDoctorName, setSelectedDoctorName] = useState("");
+
 
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
       if (isSignUp) {
+        // Sign up process
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-  
-        // Save to Firestore
-        await setDoc(doc(db, "users", user.uid), {
-          name,
-          email,
-          role,
-        });
-  
-      
+
+        await setDoc(doc(db, "users", user.uid), { name, email, role });
+
         setMessageType("success");
         setMessage("Signup successful! Please login.");
         setIsSignUp(false);
-        setEmail("");
-        setPassword("");
-        setName("");
       } else {
+        // Login process
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-  
-        // Get user data from Firestore
+
         const userDoc = await getDoc(doc(db, "users", user.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
-  
+
           // Store user info in localStorage
-          localStorage.setItem("user", JSON.stringify({
-            uid: user.uid,
-            name: userData.name,
-            email: userData.email,
-            role: userData.role
-          }));
-        
+          const nameToStore = userData.role === "doctor" ? selectedDoctorName : userData.name;
+          localStorage.setItem("user", JSON.stringify({ uid: user.uid, name: nameToStore, email: userData.email, role: userData.role }));
+          
+          // Fetch role-based data
+          await fetchRoleData(userData);
+
+          navigate("/dashboard");
+        } else {
+          setMessageType("error");
+          setMessage("User data not found.");
         }
-        navigate("/dashboard"); // Redirect to dashboard
-  
-        setMessageType("success");
-        setMessage("Login successful! Redirecting...");
-        setTimeout(() => navigate("/"), 1500);
       }
     } catch (error) {
-      setMessageType("error");
-      if (error.code === "auth/email-already-in-use") {
-        setMessage("This email is already registered. Please login.");
-      } else if (error.code === "auth/invalid-email") {
-        setMessage("Invalid email format.");
-      } else if (
-        error.code === "auth/wrong-password" ||
-        error.code === "auth/invalid-credential"
-      ) {
-        setMessage("Incorrect password.");
-      } else if (error.code === "auth/user-not-found") {
-        setMessage("No user found with this email.");
-      } else {
-        setMessage(error.message);
+      handleError(error);
+    }
+  };
+  useEffect(() => {
+    const fetchDoctorNames = async () => {
+      if (role === "doctor" && !isSignUp) {
+        const q = query(collection(db, "users"), where("role", "==", "doctor"));
+        const querySnapshot = await getDocs(q);
+        const names = querySnapshot.docs.map(doc => doc.data().name);
+        setAllDoctorNames(names);
       }
+    };
+    fetchDoctorNames();
+  }, [role, isSignUp]);
+  
+  const fetchRoleData = async (userData) => {
+    let querySnapshot;
+    if (userData.role === "patient") {
+      const doctorName = localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).name;
+      querySnapshot = await getDocs(query(collection(db, "appointments"), where("doctor", "==", doctorName)));
+            const patientAppointments = querySnapshot.docs.map(doc => doc.data());
+      localStorage.setItem("patientAppointments", JSON.stringify(patientAppointments));
+    } else if (userData.role === "doctor") {
+      querySnapshot = await getDocs(query(collection(db, "appointments"), where("doctor", "==", userData.name)));
+      const doctorAppointments = querySnapshot.docs.map(doc => doc.data());
+      localStorage.setItem("doctorAppointments", JSON.stringify(doctorAppointments));
+    } else if (userData.role === "admin") {
+      querySnapshot = await getDocs(collection(db, "appointments"));
+      const allAppointments = querySnapshot.docs.map(doc => doc.data());
+      localStorage.setItem("allAppointments", JSON.stringify(allAppointments));
+    }
+  };
+
+  const handleError = (error) => {
+    setMessageType("error");
+    if (error.code === "auth/email-already-in-use") {
+      setMessage("This email is already registered. Please login.");
+    } else if (error.code === "auth/invalid-email") {
+      setMessage("Invalid email format.");
+    } else if (error.code === "auth/wrong-password") {
+      setMessage("Incorrect password.");
+    } else if (error.code === "auth/user-not-found") {
+      setMessage("No user found with this email.");
+    } else {
+      setMessage(error.message);
     }
   };
   
@@ -203,6 +227,37 @@ function Login() {
       <option value="patient">Patient</option>
       <option value="doctor">Doctor</option>
       <option value="admin">Admin</option>
+    </TextField>
+  </Box>
+)}
+{role === "doctor" && !isSignUp && (
+  <Box sx={{ textAlign: "left", mb: 2 }}>
+    <label
+      style={{
+        fontSize: "14px",
+        fontWeight: "500",
+        marginBottom: "5px",
+        display: "block",
+      }}
+    >
+      Select Your Name
+    </label>
+    <TextField
+      select
+      SelectProps={{ native: true }}
+      fullWidth
+      variant="outlined"
+      size="small"
+      value={selectedDoctorName}
+      onChange={(e) => setSelectedDoctorName(e.target.value)}
+      sx={{ "& fieldset": { borderRadius: 2 } }}
+    >
+      <option value="">-- Select --</option>
+      {allDoctorNames.map((name, index) => (
+        <option key={index} value={name}>
+          {name}
+        </option>
+      ))}
     </TextField>
   </Box>
 )}
