@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -14,23 +14,37 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-const navItems = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
-  { name: "Appointment", path: "/appointment" },
-  { name: "Reviews", path: "/reviews" },
-  { name: "Contact Us", path: "/contact" },
-  { name: "Login", path: "/login" },
-];
-
 function Navbar() {
-  const location = useLocation(); // gives the current URL path
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // state to control the mobile menu
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    setIsLoggedIn(!!user); // true if user exists
+  }, [location]); // re-check on route change
+
   const handleDrawerToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("patientAppointments");
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
+
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Appointment", path: "/appointment" },
+    { name: "Dashboard", path: "/dashboard" },
+    { name: "Contact Us", path: "/contact" },
+    // We'll handle Login/Logout separately
+  ];
 
   const drawer = (
     <Box sx={{ textAlign: "center" }}>
@@ -49,6 +63,20 @@ function Navbar() {
             <ListItemText primary={item.name} />
           </ListItem>
         ))}
+        {isLoggedIn ? (
+          <ListItem button onClick={handleLogout}>
+            <ListItemText primary="Logout" />
+          </ListItem>
+        ) : (
+          <ListItem
+            component={Link}
+            to="/login"
+            onClick={handleDrawerToggle}
+            sx={{ textAlign: "left" }}
+          >
+            <ListItemText primary="Login" />
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -87,6 +115,30 @@ function Navbar() {
                 {item.name}
               </Button>
             ))}
+            {isLoggedIn ? (
+              <Button
+                onClick={handleLogout}
+                sx={{
+                  color: "black",
+                  textTransform: "none",
+                  fontSize: "14px",
+                }}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                component={Link}
+                to="/login"
+                sx={{
+                  color: "black",
+                  textTransform: "none",
+                  fontSize: "14px",
+                }}
+              >
+                Login
+              </Button>
+            )}
           </Box>
 
           {/* Mobile Menu Icon */}
@@ -101,7 +153,7 @@ function Navbar() {
         </Toolbar>
       </AppBar>
 
-      {/* Mobile Menu (Drawer) */}
+      {/* Mobile Drawer */}
       <Drawer
         anchor="right"
         open={mobileMenuOpen}

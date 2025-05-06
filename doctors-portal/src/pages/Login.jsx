@@ -28,8 +28,7 @@ function Login() {
   const [messageType, setMessageType] = useState(null); // 'success' or 'error'
   const [role, setRole] = useState("patient"); // default role
   const [allDoctorNames, setAllDoctorNames] = useState([]);
-const [selectedDoctorName, setSelectedDoctorName] = useState("");
-
+  const [selectedDoctorName, setSelectedDoctorName] = useState("");
 
   const navigate = useNavigate();
 
@@ -37,7 +36,11 @@ const [selectedDoctorName, setSelectedDoctorName] = useState("");
     try {
       if (isSignUp) {
         // Sign up process
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
         const user = userCredential.user;
 
         await setDoc(doc(db, "users", user.uid), { name, email, role });
@@ -47,7 +50,11 @@ const [selectedDoctorName, setSelectedDoctorName] = useState("");
         setIsSignUp(false);
       } else {
         // Login process
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
         const user = userCredential.user;
 
         const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -55,9 +62,18 @@ const [selectedDoctorName, setSelectedDoctorName] = useState("");
           const userData = userDoc.data();
 
           // Store user info in localStorage
-          const nameToStore = userData.role === "doctor" ? selectedDoctorName : userData.name;
-          localStorage.setItem("user", JSON.stringify({ uid: user.uid, name: nameToStore, email: userData.email, role: userData.role }));
-          
+          const nameToStore =
+            userData.role === "doctor" ? selectedDoctorName : userData.name;
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              uid: user.uid,
+              name: nameToStore,
+              email: userData.email,
+              role: userData.role,
+            })
+          );
+
           // Fetch role-based data
           await fetchRoleData(userData);
 
@@ -76,30 +92,66 @@ const [selectedDoctorName, setSelectedDoctorName] = useState("");
       if (role === "doctor" && !isSignUp) {
         const q = query(collection(db, "users"), where("role", "==", "doctor"));
         const querySnapshot = await getDocs(q);
-        const names = querySnapshot.docs.map(doc => doc.data().name);
+        const names = querySnapshot.docs.map((doc) => doc.data().name);
         setAllDoctorNames(names);
       }
     };
     fetchDoctorNames();
   }, [role, isSignUp]);
-  
+
   const fetchRoleData = async (userData) => {
     let querySnapshot;
+  
     if (userData.role === "patient") {
-      const doctorName = localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).name;
-      querySnapshot = await getDocs(query(collection(db, "appointments"), where("doctor", "==", doctorName)));
-            const patientAppointments = querySnapshot.docs.map(doc => doc.data());
-      localStorage.setItem("patientAppointments", JSON.stringify(patientAppointments));
-    } else if (userData.role === "doctor") {
-      querySnapshot = await getDocs(query(collection(db, "appointments"), where("doctor", "==", userData.name)));
-      const doctorAppointments = querySnapshot.docs.map(doc => doc.data());
-      localStorage.setItem("doctorAppointments", JSON.stringify(doctorAppointments));
-    } else if (userData.role === "admin") {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const patientEmail = user?.email;
+  
+      if (patientEmail) {
+        console.log("Fetching appointments for patient:", patientEmail);
+  
+        querySnapshot = await getDocs(
+          query(collection(db, "appointments"), where("email", "==", patientEmail))
+        );
+  
+        const patientAppointments = querySnapshot.docs.map((doc) => doc.data());
+        console.log("Patient appointments:", patientAppointments);
+  
+        localStorage.setItem(
+          "patientAppointments",
+          JSON.stringify(patientAppointments)
+        );
+      }
+    } 
+    
+    else if (userData.role === "doctor") {
+      console.log("Fetching appointments for doctor:", userData.name);
+  
       querySnapshot = await getDocs(collection(db, "appointments"));
-      const allAppointments = querySnapshot.docs.map(doc => doc.data());
+      const allAppointments = querySnapshot.docs.map((doc) => doc.data());
+      console.log("All appointments fetched:", allAppointments);
+  
+      const doctorAppointments = allAppointments.filter(
+        (appointment) => appointment.doctor === userData.name
+      );
+      console.log("Doctor's filtered appointments:", doctorAppointments);
+  
+      localStorage.setItem(
+        "doctorAppointments",
+        JSON.stringify(doctorAppointments)
+      );
+    } 
+    
+    else if (userData.role === "admin") {
+      console.log("Fetching all appointments for admin...");
+  
+      querySnapshot = await getDocs(collection(db, "appointments"));
+      const allAppointments = querySnapshot.docs.map((doc) => doc.data());
+      console.log("All appointments (admin):", allAppointments);
+  
       localStorage.setItem("allAppointments", JSON.stringify(allAppointments));
     }
   };
+  
 
   const handleError = (error) => {
     setMessageType("error");
@@ -115,7 +167,7 @@ const [selectedDoctorName, setSelectedDoctorName] = useState("");
       setMessage(error.message);
     }
   };
-  
+
   const handleForgotPassword = async () => {
     if (!email) {
       setMessageType("error");
@@ -202,67 +254,34 @@ const [selectedDoctorName, setSelectedDoctorName] = useState("");
         </Box>
       )}
       {/* Role Field */}
-{isSignUp && (
-  <Box sx={{ textAlign: "left", mb: 2 }}>
-    <label
-      style={{
-        fontSize: "14px",
-        fontWeight: "500",
-        marginBottom: "5px",
-        display: "block",
-      }}
-    >
-      Role
-    </label>
-    <TextField
-      select
-      SelectProps={{ native: true }}
-      fullWidth
-      variant="outlined"
-      size="small"
-      value={role}
-      onChange={(e) => setRole(e.target.value)}
-      sx={{ "& fieldset": { borderRadius: 2 } }}
-    >
-      <option value="patient">Patient</option>
-      <option value="doctor">Doctor</option>
-      <option value="admin">Admin</option>
-    </TextField>
-  </Box>
-)}
-{role === "doctor" && !isSignUp && (
-  <Box sx={{ textAlign: "left", mb: 2 }}>
-    <label
-      style={{
-        fontSize: "14px",
-        fontWeight: "500",
-        marginBottom: "5px",
-        display: "block",
-      }}
-    >
-      Select Your Name
-    </label>
-    <TextField
-      select
-      SelectProps={{ native: true }}
-      fullWidth
-      variant="outlined"
-      size="small"
-      value={selectedDoctorName}
-      onChange={(e) => setSelectedDoctorName(e.target.value)}
-      sx={{ "& fieldset": { borderRadius: 2 } }}
-    >
-      <option value="">-- Select --</option>
-      {allDoctorNames.map((name, index) => (
-        <option key={index} value={name}>
-          {name}
-        </option>
-      ))}
-    </TextField>
-  </Box>
-)}
-
-
+      {isSignUp && (
+        <Box sx={{ textAlign: "left", mb: 2 }}>
+          <label
+            style={{
+              fontSize: "14px",
+              fontWeight: "500",
+              marginBottom: "5px",
+              display: "block",
+            }}
+          >
+            Role
+          </label>
+          <TextField
+            select
+            SelectProps={{ native: true }}
+            fullWidth
+            variant="outlined"
+            size="small"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            sx={{ "& fieldset": { borderRadius: 2 } }}
+          >
+            <option value="patient">Patient</option>
+            <option value="doctor">Doctor</option>
+            <option value="admin">Admin</option>
+          </TextField>
+        </Box>
+      )}
 
       {/* Email Field */}
       <Box sx={{ textAlign: "left", mb: 2 }}>
