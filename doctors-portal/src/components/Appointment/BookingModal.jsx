@@ -44,7 +44,7 @@ function BookingModal({ open, handleClose, appointment, selectedDate, handleBook
       // Save to Firebase
       await addDoc(collection(db, "appointments"), newBooking);
   
-      // ✅ Save to localStorage
+      // Save to localStorage
       const existingBookings = JSON.parse(localStorage.getItem("bookedAppointments")) || [];
       existingBookings.push(newBooking);
       localStorage.setItem("bookedAppointments", JSON.stringify(existingBookings));

@@ -13,14 +13,14 @@ const CheckoutButton = ({ appointment }) => {
     const { error } = await stripe.redirectToCheckout({
       lineItems: [
         {
-          price: "price_1RGmNlGgzLYNknzjhkOOK8l5", // Replace with dynamic price if needed
+          price: "price_1RGmNlGgzLYNknzjhkOOK8l5", 
           quantity: 1,
         },
       ],
       mode: "payment",
       successUrl: `${window.location.origin}/thank-you`,
       cancelUrl: `${window.location.origin}/cancel`,
-      customerEmail: appointment?.email, // optional if needed
+      customerEmail: appointment?.email, 
     });
 
     if (error) {
